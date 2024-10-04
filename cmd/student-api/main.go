@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/ChandanGupta31/student-api/internal/config"
+	"github.com/ChandanGupta31/student-api/internal/http/handlers/student"
 )
 
 func main() {
@@ -22,9 +23,7 @@ func main() {
 	// setup router
 	router := http.NewServeMux()
 	// -> Creating End Point
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello KNG"))
-	})
+	router.HandleFunc("POST /api/students", student.New())
 
 	// setup server
 	server := http.Server{
@@ -51,8 +50,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err := server.Shutdown(ctx)
-	if err != nil {
+	if err := server.Shutdown(ctx); err != nil {
 		slog.Error("Failed to Shutdown Server", slog.String("Error", err.Error()))
 	}
 
